@@ -16,24 +16,28 @@ namespace Logica
             double aux2 = 0;
 
             //Actividad 2 A
-            aux1 = 1 / (Limite + 0.5);
-            aux2 = (1 / 4) * Math.Pow(Limite, 2);
-            resultadoo = aux1 + aux2;
+            //resultadoo = (1 / (Limite + 0.5)) + ((0.25) * Math.Pow(Limite, 2));
 
             //Actividad 2 B
-            resultadoo = 1 + Math.Pow(Limite, 2);
-            resultadoo = Math.Log(resultadoo);
+            // resultadoo = 1 + Math.Pow(Limite, 2);
+            // resultadoo = Math.Log(resultadoo);
 
             //Actividad 2 C
-            resultadoo = Math.Pow(Math.E, Limite) * (1 + (0.5 * Math.Pow(Limite, 2)));
+           /* aux1 = Math.Pow((2.7182), Limite);
+            aux2 = 1 - ((0.5) * (Math.Pow(Limite, 2)));
+            resultadoo = aux1 * aux2; */
 
             //Actividad 3
-            double Gfuncion = (-3 / 4) * Math.Pow(Limite, 2);
+            double Gfuncion = (-0.75) * Math.Pow(Limite, 2);
             Gfuncion = Gfuncion - Limite + 4;
-            aux1 = (1 / 16) * Math.Pow(Limite, 4);
-            aux2 = (1 / 4) * Math.Pow(Limite, 3);
+            resultadoo = Gfuncion; 
+            
+           /* aux1 = (0.0625) * Math.Pow(Limite, 4);
+            aux2 = (0.25) * Math.Pow(Limite, 3);
             double Ffuncion = aux1 - aux2;
-            resultadoo = Gfuncion - Ffuncion;
+            resultadoo = Ffuncion;*/
+
+           // resultadoo = Gfuncion - Ffuncion;
 
             return resultadoo;
         }
@@ -44,7 +48,7 @@ namespace Logica
             double Area = 0;
 
             Area = ObtenerFuncion(dato.ValorXA) + ObtenerFuncion(dato.ValorXB);
-            Area = Area * (dato.ValorXB * dato.ValorXA);
+            Area = Area * (dato.ValorXB - dato.ValorXA);
             Area = Area / 2;
 
             return Area;
@@ -54,16 +58,20 @@ namespace Logica
         public double MetodoTrapezoideMultiple(Datos dato, int Nintervalos)
         {
             double Area = 0;
-            double h = dato.ValorXB - dato.ValorXA;
-            double aux = (dato.ValorXB - dato.ValorXA) / Nintervalos;
-            double intervalo = dato.ValorXA + aux;
+            double h = (dato.ValorXB - dato.ValorXA) / Nintervalos;
+            double intervalo = dato.ValorXA;
+            double aux = 0;
+            double suma = 0;
 
-            for (int i = 1; i < Nintervalos; i++)
+            for (int i = 1; i <= Nintervalos - 1; i++)
             {
-                Area += ObtenerFuncion(intervalo);
-                intervalo += aux;
+                aux = intervalo + (i * h);
+                suma = ObtenerFuncion(aux);
+                Area += suma;
             }
-            Area = (Area * 2) + ObtenerFuncion(dato.ValorXA) + ObtenerFuncion(dato.ValorXB);
+
+            Area = (Area * 2);
+            Area = Area + ObtenerFuncion(dato.ValorXA) + ObtenerFuncion(dato.ValorXB);
             Area = Area * (h / 2);
 
             return Area;
@@ -77,6 +85,7 @@ namespace Logica
             double h = (dato.ValorXB - dato.ValorXA) / 2;
 
             Area = ObtenerFuncion(dato.ValorXB) + (ObtenerFuncion(x1) * 4) + ObtenerFuncion(dato.ValorXA);
+            Area = (h / 3) * Area;
 
             return Area;
         }
@@ -86,25 +95,24 @@ namespace Logica
         {
             double Area = 0;
             double h = (dato.ValorXB - dato.ValorXA) / Nintervalos;
-            double intervalo = dato.ValorXA + h;
-            bool ban = false;
+            double intervalo = dato.ValorXA;
             double aux1 = 0;
             double aux2 = 0;
-
-            for (int i = 1; i < Nintervalos; i++)
+            double aux = 0;
+           
+            for (int i = 1; i <= Nintervalos - 1;)
             {
-                if (ban == false)
-                {
-                    aux1 += ObtenerFuncion(intervalo);
-                    ban = true;
-                }
-                else
-                {
-                    aux2 += ObtenerFuncion(intervalo);
-                    ban = true;
-                }
-                intervalo += h;
+                aux = (i * h) + intervalo;
+                aux1 += ObtenerFuncion(aux);
+                i = i + 2;
             }
+            for (int j = 2; j <= Nintervalos - 2;)
+            {
+                aux = (j * h) + intervalo;
+                aux2 += ObtenerFuncion(aux);
+                j = j + 2;
+            }
+
             Area = ObtenerFuncion(dato.ValorXA) + (4 * aux1) + (2 * aux2) + ObtenerFuncion(dato.ValorXB);
             Area = (h / 3) * Area;
 
@@ -121,7 +129,7 @@ namespace Logica
             double x3 = x2 + h;
 
             Area = ObtenerFuncion(dato.ValorXA) + (3 * ObtenerFuncion(x1)) + (3 * ObtenerFuncion(x2)) + ObtenerFuncion(x3);
-            Area = Area * ((3 / 8) * h);
+            Area = Area * (0.375 * h);
 
             return Area;
         }
